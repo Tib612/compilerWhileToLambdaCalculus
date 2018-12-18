@@ -2,6 +2,7 @@ from gen.whileLangVisitor import whileLangVisitor
 from gen.whileLangParser import whileLangParser
 from myVisitors.codePrinter import codePrinter
 cp = codePrinter()
+cp.setHumanReadable(False)
 
 class myWhileLangVisitor(whileLangVisitor):
 
@@ -63,7 +64,7 @@ class myWhileLangVisitor(whileLangVisitor):
     def visitA(self, ctx:whileLangParser.AContext):
         #print("visitA")
         if ctx.NUM():
-            return cp.int(ctx.NUM().__str__())
+            return cp.int(int(ctx.NUM().__str__()))
         elif ctx.NIL():
             return cp.false()
 
@@ -83,7 +84,7 @@ class myWhileLangVisitor(whileLangVisitor):
         elif ctx.ATTR():
             txt = r"(\s." + self.visitVar(ctx.var(), True) + " " + self.visitExpr(ctx.expr())+")"
             if self.firstVar:
-                txt += cp.init() + cp.int(str(self.nbVar))
+                txt = "(" + txt + cp.init() + " " + cp.int(int(str(self.nbVar))) + ")"
                 self.firstVar = False
         elif ctx.SEMICOLON():
 
@@ -118,9 +119,9 @@ class myWhileLangVisitor(whileLangVisitor):
             return self.visitVar(ctx.var(),setter)
         elif ctx.NUM():
             if setter:
-                return "(\sve.set s v e) s " + ctx.NUM().__str__()
+                return cp.set() + " s " + cp.int(int(ctx.NUM().__str__()))
             else:
-                return "(\sv.get s v) s "+ctx.NUM().__str__()
+                return cp.get() + " s " + cp.int(int(ctx.NUM().__str__()))
         return "problem Var"
 
 
