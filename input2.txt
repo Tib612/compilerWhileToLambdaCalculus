@@ -1,0 +1,3 @@
+(; (:= (var 1) (quote nil)) (while (var 0)
+(; (:= (var 1) (cons (hd (var 0)) (var 1)))
+(:= (var 0) (tl (var 0))))))

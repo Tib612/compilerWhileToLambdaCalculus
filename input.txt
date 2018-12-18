@@ -1,0 +1,12 @@
+(;
+ (:= (var 0) (quote nil))
+ (;
+  (:= (var 1) (quote nil))
+   (while (=? quote nil (=? (var 0) (quote 2)))
+    (;
+     (:= (var 0) ((var 0) + (quote 1)) )
+     (:= (var 1) ((var 1) + (quote 2)) )
+    )
+   )
+ )
+)
