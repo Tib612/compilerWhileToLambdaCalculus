@@ -6,7 +6,7 @@ from myVisitors.myWhileLangVisitor import myWhileLangVisitor
 from myVisitors.semantiqueVisitor import semantiqueVisitor
 
 def main(argv):
-    input = FileStream("input3.txt")
+    input = FileStream("input.txt")
     lexer = whileLangLexer(input)
     stream = CommonTokenStream(lexer)
     parser = whileLangParser(stream)

@@ -69,3 +69,18 @@ class codePrinter():
         if self.humanReadable:
             return sys._getframe(0).f_code.co_name
         return r"(\y.(\x. y (x x)) (\x. y (x x)) )"
+
+    def init(self):
+        if self.humanReadable:
+            return sys._getframe(0).f_code.co_name
+        return self.recursion()+r"(\bn.Zn0(\z.z0(b Pn)))"
+
+    def int(self,val):
+        if self.humanReadable:
+            return val
+        return r"(\sz."+"(s"*val+"z"+")"*val+")"
+
+    def p_while(self):
+        if self.humanReadable:
+            return sys._getframe(0).f_code.co_name
+        return self.recursion() + r"(\bIJs.I s (b IJ (J s))  s ) "

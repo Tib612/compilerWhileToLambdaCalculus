@@ -1,1 +1,1 @@
-(\s.(\sve.set s v e) s 0false)(recursion(\bIJs.I s (b IJ (J s))  s ) (\s.eq false s (\s.eq (\s.(\sv.get s v) s 0) s 2 s) s) (\s.(\sve.set s v e) s 0(\s.add (\s.(\sv.get s v) s 0) 1)))(init 1)
+((\s.(\sve.set s v e) s 1 false)(recursion(\bIJs.I s (b IJ (J s))  s ) (\s.eq false (\s.eq (\s.(\sv.get s v) s 0) s 2) s) ((\s.(\sve.set s v e) s 1 (\s.add (\s.(\sv.get s v) s 1) s 2))(\s.(\sve.set s v e) s 0 (\s.add (\s.(\sv.get s v) s 0) s 1)))(\s.(\sve.set s v e) s 0 false)init2))
