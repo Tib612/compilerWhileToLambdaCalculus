@@ -1,10 +1,8 @@
-(;
+
    (while (=? (quote nil) (=? (var 0) (quote 2)))
 
      (:= (var 0) (quote 2) )
 
-   )
 
-    (:= (var 0) (quote 5))
-)
+   )
 

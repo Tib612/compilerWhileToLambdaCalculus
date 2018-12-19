@@ -2,7 +2,8 @@ from gen.whileLangVisitor import whileLangVisitor
 from gen.whileLangParser import whileLangParser
 from myVisitors.codePrinter import codePrinter
 cp = codePrinter()
-cp.setHumanReadable(False)
+cp.setHumanReadable(True)
+cp.setShortcut(True)
 
 class myWhileLangVisitor(whileLangVisitor):
 
@@ -44,19 +45,19 @@ class myWhileLangVisitor(whileLangVisitor):
         elif ctx.LPAR():
             return self.visitAexpr(ctx.aexpr())
 
-        s1 = " "
-        s2 = ")"
+        s1 = ") "
+        s2 = "))"
         if self.needState(ctx.aexpr(0)):
-            s1 = " s "
+            s1 = " s) ("
         if self.needState(ctx.aexpr(1)):
-            s2 = " s)"
+            s2 = " s))"
 
         if ctx.PLUS():
-            return txt + cp.add() + " " +self.visitAexpr(ctx.aexpr(0))+ s1 +self.visitAexpr(ctx.aexpr(1)) + s2
+            return txt + cp.add() + " (" +self.visitAexpr(ctx.aexpr(0))+ s1 +self.visitAexpr(ctx.aexpr(1)) + s2
         elif ctx.MINUS():
-            return txt + cp.sub() + " " +self.visitAexpr(ctx.aexpr(0))+ s1 +self.visitAexpr(ctx.aexpr(1)) + s2
+            return txt + cp.sub() + " (" +self.visitAexpr(ctx.aexpr(0))+ s1 +self.visitAexpr(ctx.aexpr(1)) + s2
         elif ctx.MULT():
-            return txt + cp.mult() + " " +self.visitAexpr(ctx.aexpr(0))+ s1 +self.visitAexpr(ctx.aexpr(1)) + s2
+            return txt + cp.mult() + " (" +self.visitAexpr(ctx.aexpr(0))+ s1 +self.visitAexpr(ctx.aexpr(1)) + s2
 
         return "problem Aexpr"
 
@@ -70,7 +71,7 @@ class myWhileLangVisitor(whileLangVisitor):
 
         return "problem A"
 
-    firstVar = True
+    #firstVar = True
     def visitInstr(self, ctx: whileLangParser.InstrContext, needLBRA=False):
         #print("visitInstr")
 
@@ -82,19 +83,30 @@ class myWhileLangVisitor(whileLangVisitor):
             txt, n = self.visitInstr(ctx.instr(),needLBRA)
             nTot = n
         elif ctx.ATTR():
-            txt = r"(\s." + self.visitVar(ctx.var(), True) + " " + self.visitExpr(ctx.expr())+")"
-            if self.firstVar:
-                txt = "(" + txt + cp.init() + " " + cp.int(int(str(self.nbVar))) + ")"
+
+            s0 = " "
+            s1 = " "
+            if self.needState(ctx.expr()):
+                s0 = " ( "
+                s1 = " s )"
+
+            txt = r"(\s." + self.visitVar(ctx.var(), True) + s0 + self.visitExpr(ctx.expr())+s1+")"
+            '''if self.firstVar:
+                txt = " (" + txt +" ("+ cp.init() + " " + cp.int(int(str(self.nbVar))) + "))"
                 self.firstVar = False
+            if self.firstVarInWhile:
+                txt = " (" + txt +" u)"
+                self.firstVarInWhile = False'''
         elif ctx.SEMICOLON():
 
             tmptxt = self.visitInstr(ctx.instr(0))[0]
+            #i deleted bracket arround here :/
 
 
 
             txt, n = self.visitInstr(ctx.instr(1), True)
             if needLBRA:
-                txt = txt + "("
+                txt = txt + " ("
                 n += 1
             nTot = n
 
@@ -105,13 +117,22 @@ class myWhileLangVisitor(whileLangVisitor):
             txt += tmptxt
 
         elif ctx.WHILE():
-            txt = cp.p_while() + self.visitExpr(ctx.expr()) + " " + self.visitInstr(ctx.instr())[0]
+            r'''if self.firstVar:
+                print("caca")
+                self.firstVar = False
+                self.firstVarInWhile = True
+                txt = " (" + \
+                      " "+cp.p_while() +" "+ self.visitExpr(ctx.expr()) + r" (\u." + self.visitInstr(ctx.instr())[0] +\
+                      ") ("+ cp.init() + " " + cp.int(int(str(self.nbVar))) + "))"
+            else:'''
+            txt = " "+cp.p_while() +" "+ self.visitExpr(ctx.expr()) + " " + self.visitInstr(ctx.instr())[0]
 
         if needLBRA and not ctx.SEMICOLON() and not ctx.LPAR():
             txt = "(" + txt
             nTot += 1
         return txt, nTot
 
+    #firstVarInWhile = False
 
     def visitVar(self, ctx: whileLangParser.VarContext, setter=False):
         #print("visitVar")
@@ -145,17 +166,17 @@ class myWhileLangVisitor(whileLangVisitor):
         elif ctx.TL():
             return txt + self.visitExpr(ctx.expr()) + s1 + cp.false() + ")"
 
-        s1 = " "
-        s2 = ")"
+        s1 = ") ("
+        s2 = "))"
         if self.needState(ctx.expr(0)):
-            s1 = " s "
+            s1 = " s ) ("
         if self.needState(ctx.expr(1)):
-            s2 = " s)"
+            s2 = " s))"
 
         if ctx.CONS():
             return txt + "w.w"+self.visitExpr(ctx.expr(0)) + s1 + self.visitExpr(ctx.expr(1))+ s2
         elif ctx.ISEQUAL():
-            return txt + cp.eq() + " " + self.visitExpr(ctx.expr(0)) + s1 + self.visitExpr(ctx.expr(1)) + s2
+            return txt + cp.eq() + " (" + self.visitExpr(ctx.expr(0)) + s1 + self.visitExpr(ctx.expr(1)) + s2
 
         return "problem Expr"
 

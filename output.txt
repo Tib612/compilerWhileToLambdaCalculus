@@ -1,0 +1,27 @@
+( While
+    (\s.Equal (False) ((\s.Equal ((\s.Get s 0) s ) (2)) s))
+    (
+        While
+            (\s.Equal (False) ((\s.Equal ((\s.Get s 1) s ) (2)) s))
+            (
+                (\s.Sett s 2 ( (\s.Add ((\s.Get s 2) s) (1)) s ))
+                (\s.Sett s 1 ( (\s.Add ((\s.Get s 1) s) (1)) s ))
+            )
+            (
+                (\s.Sett s 1 0 )
+                (\s.Sett s 0 ( (\s.Add ((\s.Get s 0) s) (1)) s ))
+            )
+    )
+    ((\s.Sett s 2 0 ) ((\s.Sett s 1 0 )(\s.Sett s 0 0 )))
+) (init 2)
+
+
+
+(
+    (\s.Sett s 0 0 )
+    While
+    (\s.Equal (False) ((\s.Equal ((\s.Get s 0) s ) (2)) s))
+    (\s.Sett s 0 ( (\s.Add ((\s.Get s 0) s) (1)) s )
+)
+
+(init 2)

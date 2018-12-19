@@ -4,7 +4,7 @@
          (:= (var 0) (quote 2) )
             (;
              (:= (var 0) (quote 3) )
-             (:= (var 1) (quote 4) )
+             (:= (var 1) (var 0) )
             )
         )
      )
