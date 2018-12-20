@@ -5,8 +5,12 @@ from gen.whileLangParser import whileLangParser
 from myVisitors.myWhileLangVisitor import myWhileLangVisitor
 from myVisitors.semantiqueVisitor import semantiqueVisitor
 
-def main(argv):
-    input = FileStream("input8.txt")
+# var to change
+test = True
+
+def run(source,destination):
+
+    input = FileStream(source)
     lexer = whileLangLexer(input)
     stream = CommonTokenStream(lexer)
     parser = whileLangParser(stream)
@@ -14,9 +18,17 @@ def main(argv):
     mySemantiqueVisitor = semantiqueVisitor()
     mySemantiqueVisitor.visit(tree)
     nbVar = len(mySemantiqueVisitor.getVarList())
-    print("nbVar = {}".format(nbVar))
-    visitor = myWhileLangVisitor(nbVar)
-    return visitor.visit(tree)
+    visitor = myWhileLangVisitor(nbVar,destination)
+    visitor.visit(tree)
+
+def main(argv):
+
+    if test:
+        nbTests = 9
+        for i in range(nbTests):
+            run("tests/input"+str(i+1)+".txt", "tests/output"+str(i+1)+".txt")
+    else:
+        run("tests/input1.txt", "tests/output1.txt")
 
 if __name__ == '__main__':
     main(sys.argv)

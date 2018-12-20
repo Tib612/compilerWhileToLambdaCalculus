@@ -117,7 +117,7 @@ class codePrinter():
             if self.shortcut:
                 return "While"
             return sys._getframe(0).f_code.co_name
-        content = "j s (b i j (j s)) s"
+        content = "i s (b i j (j s)) s"
         return self.recursion() + " " + self.expression(content,["b","i","j","s"])
 
     def get(self):

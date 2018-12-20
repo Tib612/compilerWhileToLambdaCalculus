@@ -2,13 +2,14 @@ from gen.whileLangVisitor import whileLangVisitor
 from gen.whileLangParser import whileLangParser
 from myVisitors.codePrinter import codePrinter
 cp = codePrinter()
-cp.setHumanReadable(True)
+cp.setHumanReadable(False)
 cp.setShortcut(True)
 
 class myWhileLangVisitor(whileLangVisitor):
 
-    def __init__(self,nbVar):
+    def __init__(self,nbVar,outputfile=""):
         self.nbVar = nbVar
+        self.outputfile = outputfile
 
     def needState(self,ctx):
         return "var" in ctx.getText()
@@ -18,7 +19,8 @@ class myWhileLangVisitor(whileLangVisitor):
         res = ""
         if ctx.instr():
             res = self.visitInstr(ctx.instr())[0]
-        with open("output.txt", "a") as myfile:
+            res += " ("+ cp.init() + " " + cp.int(int(str(self.nbVar))) + ")"
+        with open(self.outputfile, "w") as myfile:
             myfile.write(res)
 
     def visitQuote(self, ctx: whileLangParser.QuoteContext):
@@ -72,67 +74,42 @@ class myWhileLangVisitor(whileLangVisitor):
         return "problem A"
 
     #firstVar = True
-    def visitInstr(self, ctx: whileLangParser.InstrContext, needLBRA=False):
+    def visitInstr(self, ctx: whileLangParser.InstrContext, needLBRA=None):
+        #print("in: "+str(needLBRA))
         #print("visitInstr")
 
         ctx = self.checkForList(ctx)
-        nTot = 0
         txt = ""
 
+        if needLBRA is None:
+            needLBRA = []
+
         if ctx.LPAR():
-            txt, n = self.visitInstr(ctx.instr(),needLBRA)
-            nTot = n
+            txt, needLBRA = self.visitInstr(ctx.instr(),needLBRA)
         elif ctx.ATTR():
 
             s0 = " "
             s1 = " "
             if self.needState(ctx.expr()):
-                s0 = " ( "
-                s1 = " s )"
-
+                s0 = " ("
+                s1 = " s)"
             txt = r"(\s." + self.visitVar(ctx.var(), True) + s0 + self.visitExpr(ctx.expr())+s1+")"
-            '''if self.firstVar:
-                txt = " (" + txt +" ("+ cp.init() + " " + cp.int(int(str(self.nbVar))) + "))"
-                self.firstVar = False
-            if self.firstVarInWhile:
-                txt = " (" + txt +" u)"
-                self.firstVarInWhile = False'''
+
         elif ctx.SEMICOLON():
 
-            tmptxt = self.visitInstr(ctx.instr(0))[0]
-            #i deleted bracket arround here :/
-
-
-
-            txt, n = self.visitInstr(ctx.instr(1), True)
-            if needLBRA:
-                txt = txt + " ("
-                n += 1
-            nTot = n
-
-            if not needLBRA:
-                for _ in range(nTot):
-                    tmptxt = tmptxt + ")"
-
-            txt += tmptxt
+            txt0 = self.visitInstr(ctx.instr(0))[0]
+            needLBRA.append(txt0)
+            txt1, list = self.visitInstr(ctx.instr(1), needLBRA)
+            txt = r"(\s. {} ({} s))".format(txt1,needLBRA.pop(-1))
 
         elif ctx.WHILE():
-            r'''if self.firstVar:
-                print("caca")
-                self.firstVar = False
-                self.firstVarInWhile = True
-                txt = " (" + \
-                      " "+cp.p_while() +" "+ self.visitExpr(ctx.expr()) + r" (\u." + self.visitInstr(ctx.instr())[0] +\
-                      ") ("+ cp.init() + " " + cp.int(int(str(self.nbVar))) + "))"
-            else:'''
-            txt = " "+cp.p_while() +" "+ self.visitExpr(ctx.expr()) + " " + self.visitInstr(ctx.instr())[0]
 
-        if needLBRA and not ctx.SEMICOLON() and not ctx.LPAR():
-            txt = "(" + txt
-            nTot += 1
-        return txt, nTot
+            #print("in while")
+            txt = r" (\s. "+cp.p_while() +" "+ self.visitExpr(ctx.expr()) + " " + self.visitInstr(ctx.instr())[0]+" s)"
 
-    #firstVarInWhile = False
+        #print("out: "+str(needLBRA))
+
+        return txt, needLBRA
 
     def visitVar(self, ctx: whileLangParser.VarContext, setter=False):
         #print("visitVar")
@@ -169,7 +146,7 @@ class myWhileLangVisitor(whileLangVisitor):
         s1 = ") ("
         s2 = "))"
         if self.needState(ctx.expr(0)):
-            s1 = " s ) ("
+            s1 = " s) ("
         if self.needState(ctx.expr(1)):
             s2 = " s))"
 
