@@ -208,3 +208,19 @@ class codePrinter():
                   + " b) ) (" + self.equalList()+ " a b) ((" + self.p_and() + " (" + self.isInt() + " a) (" + \
                   self.isInt() + " b)) (" + self.eq() + " a b) " + self.false() + "))"
         return self.expression(content,["a","b"])
+
+    def equalAny2(self):
+        if self.humanReadable:
+            if self.shortcut:
+                return "EqualAny"
+            return sys._getframe(0).f_code.co_name
+        contentEqualList = "((BooleanEval a) (" + self.booleanEval() + " b) " + self.false()+ ")   ( w  (a "\
+                  + self.true() +") (b " + self.true() + ")  (r (a " + self.false() + ") (b" + self.false() + "))   " +\
+                  self.false() + "  ) " + self.true()
+        contentEqualList = self.recursion()+ " " + self.expression(contentEqualList,["r","a","b"])
+        content = "(" + self.p_or() + " (" + self.isBoolean() + " a) (" + self.isBoolean() + " b))  ( (" + \
+                  self.booleanEval() + " a) (" + self.booleanEval() + " b) ((" + self.booleanEval() + " b) " + \
+                  self.false() + self.true() + ")) ((" + self.p_and() + " (" + self.isList() + " a) (" + self.isList()\
+                  + " b) ) (" + contentEqualList + " a b) ((" + self.p_and() + " (" + self.isInt() + " a) (" + \
+                  self.isInt() + " b)) (" + self.eq() + " a b) " + self.false() + "))"
+        return self.recursion()+ " " + self.expression(content,["w","a","b"])
