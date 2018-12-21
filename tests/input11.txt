@@ -1,0 +1,12 @@
+        (:= (var 0)
+            (cons
+                (quote 5)
+                (cons
+                    (quote 6)
+                    (cons
+                        (quote 7)
+                        (quote nil)
+                    )
+                )
+            )
+        )

@@ -147,3 +147,20 @@ class codePrinter():
         if len(vars) == 0:
             return content
         return self.expression("(\{}.{})".format(vars.pop(),content),vars)
+
+    def isBoolean(self):
+        return r"(\z. " + self.is0() + " (" + self.isNil() + " z " + self.false() + " " + self.false()+" " + self.false() + "))"
+
+    def isNil(self):
+        if self.humanReadable:
+            if self.shortcut:
+                return "IsNil"
+            return sys._getframe(0).f_code.co_name
+        return r"(\p.p (\x.(\y.False)))"
+
+    def booleanEval(self):
+        if self.humanReadable:
+            if self.shortcut:
+                return "BooleanEval"
+            return sys._getframe(0).f_code.co_name
+        return r"(\z. " + self.isBoolean() + " z z " + self.true() + ")"

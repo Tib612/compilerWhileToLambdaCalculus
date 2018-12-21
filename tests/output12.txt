@@ -1,0 +1,1 @@
+(\s.  (\s. While (\s.BooleanEval ((\s.Get s 0)s)) (\s. (\s.Sett s 0 ((\s.(\s.Get s 0) s False) s)) ((\s.Sett s 1 ((\s.Cons((\s.(\s.Get s 0) s True) s) ((\s.Get s 1) s)) s)) s)) s) ((\s. (\s.Sett s 1 False ) ((\s.Sett s 0 (Cons(5) ((Cons(6) ((Cons(7) (False)))))) ) s)) s)) (Init 2)

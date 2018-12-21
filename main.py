@@ -6,7 +6,7 @@ from myVisitors.myWhileLangVisitor import myWhileLangVisitor
 from myVisitors.semantiqueVisitor import semantiqueVisitor
 
 # var to change
-test = True
+test = False
 
 def run(source,destination):
 
@@ -24,11 +24,11 @@ def run(source,destination):
 def main(argv):
 
     if test:
-        nbTests = 9
+        nbTests = 10
         for i in range(nbTests):
             run("tests/input"+str(i+1)+".txt", "tests/output"+str(i+1)+".txt")
     else:
-        run("tests/input1.txt", "tests/output1.txt")
+        run("tests/input12.txt", "tests/output12.txt")
 
 if __name__ == '__main__':
     main(sys.argv)

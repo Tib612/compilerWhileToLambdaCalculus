@@ -1,0 +1,7 @@
+        (:= (var 0)
+
+                    (cons
+                        (quote 7)
+                        (quote nil)
+                    )
+)

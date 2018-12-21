@@ -2,7 +2,7 @@ from gen.whileLangVisitor import whileLangVisitor
 from gen.whileLangParser import whileLangParser
 from myVisitors.codePrinter import codePrinter
 cp = codePrinter()
-cp.setHumanReadable(False)
+cp.setHumanReadable(True)
 cp.setShortcut(True)
 
 class myWhileLangVisitor(whileLangVisitor):
@@ -103,9 +103,9 @@ class myWhileLangVisitor(whileLangVisitor):
             txt = r"(\s. {} ({} s))".format(txt1,needLBRA.pop(-1))
 
         elif ctx.WHILE():
-
             #print("in while")
-            txt = r" (\s. "+cp.p_while() +" "+ self.visitExpr(ctx.expr()) + " " + self.visitInstr(ctx.instr())[0]+" s)"
+            condition = r"(\s." + cp.booleanEval() + " (" + self.visitExpr(ctx.expr()) +"s))"
+            txt = r" (\s. "+cp.p_while() +" "+ condition + " " + self.visitInstr(ctx.instr())[0]+" s)"
 
         #print("out: "+str(needLBRA))
 
@@ -151,7 +151,7 @@ class myWhileLangVisitor(whileLangVisitor):
             s2 = " s))"
 
         if ctx.CONS():
-            return txt + "w.w"+self.visitExpr(ctx.expr(0)) + s1 + self.visitExpr(ctx.expr(1))+ s2
+            return txt + cp.cons() + "(" +self.visitExpr(ctx.expr(0)) + s1 + self.visitExpr(ctx.expr(1))+ s2
         elif ctx.ISEQUAL():
             return txt + cp.eq() + " (" + self.visitExpr(ctx.expr(0)) + s1 + self.visitExpr(ctx.expr(1)) + s2
 
