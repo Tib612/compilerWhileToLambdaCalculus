@@ -153,7 +153,7 @@ class myWhileLangVisitor(whileLangVisitor):
         if ctx.CONS():
             return txt + cp.cons() + "(" +self.visitExpr(ctx.expr(0)) + s1 + self.visitExpr(ctx.expr(1))+ s2
         elif ctx.ISEQUAL():
-            return txt + cp.eq() + " (" + self.visitExpr(ctx.expr(0)) + s1 + self.visitExpr(ctx.expr(1)) + s2
+            return txt + cp.equalAny() + " (" + self.visitExpr(ctx.expr(0)) + s1 + self.visitExpr(ctx.expr(1)) + s2
 
         return "problem Expr"
 

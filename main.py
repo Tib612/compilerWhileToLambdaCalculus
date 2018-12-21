@@ -28,7 +28,7 @@ def main(argv):
         for i in range(nbTests):
             run("tests/input"+str(i+1)+".txt", "tests/output"+str(i+1)+".txt")
     else:
-        run("tests/input12.txt", "tests/output12.txt")
+        run("tests/input9.txt", "tests/output9.txt")
 
 if __name__ == '__main__':
     main(sys.argv)

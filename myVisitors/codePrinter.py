@@ -149,7 +149,7 @@ class codePrinter():
         return self.expression("(\{}.{})".format(vars.pop(),content),vars)
 
     def isBoolean(self):
-        return r"(\z. " + self.is0() + " (" + self.isNil() + " z " + self.false() + " " + self.false()+" " + self.false() + "))"
+        return r"(\z. " + self.is0() + " (" + self.isNil() + " z " + self.false() + " " + self.false()+ " " + self.false() + "))"
 
     def isNil(self):
         if self.humanReadable:
@@ -164,3 +164,47 @@ class codePrinter():
                 return "BooleanEval"
             return sys._getframe(0).f_code.co_name
         return r"(\z. " + self.isBoolean() + " z z " + self.true() + ")"
+
+    def isList(self):
+        if self.humanReadable:
+            if self.shortcut:
+                return "IsList"
+            return sys._getframe(0).f_code.co_name
+        return r"(\z. " + self.isBoolean() + " z " + self.false()+ r" (z (\a.(\b.(\x.x))) " + self.true()+"))"
+
+    def equalList(self):
+        if self.humanReadable:
+            if self.shortcut:
+                return "EqualList"
+            return sys._getframe(0).f_code.co_name
+        content = "((BooleanEval a) (" + self.booleanEval() + " b) " + self.false()+ ")   (" + self.equalAny()+ r" (a "\
+                  + self.true() +") (b " + self.true() + ")  (r (a " + self.false() + ") (b" + self.false() + "))   " +\
+                  self.false() + "  ) " + self.true()
+        return self.recursion()+ " " + self.expression(content,["r","a","b"])
+
+    def isInt(self):
+        if self.humanReadable:
+            if self.shortcut:
+                return "IsInt"
+            return sys._getframe(0).f_code.co_name
+        return "(\z. " + self.isBoolean() + " z (z " + self.false() + self.true() + ") (" + self.isList() + " z " + self.false() + self.true() + ") )"
+
+    def p_or(self):
+        if self.humanReadable:
+            if self.shortcut:
+                return "Or"
+            return sys._getframe(0).f_code.co_name
+        content = "(x " + self.true() + " (y " + self.true() + self.false() + "))"
+        return self.expression(content,["x","y"])
+
+    def equalAny(self):
+        if self.humanReadable:
+            if self.shortcut:
+                return "EqualAny"
+            return sys._getframe(0).f_code.co_name
+        content = "(" + self.p_or() + " (" + self.isBoolean() + " a) (" + self.isBoolean() + " b))  ( (" + \
+                  self.booleanEval() + " a) (" + self.booleanEval() + " b) ((" + self.booleanEval() + " b) " + \
+                  self.false() + self.true() + ")) ((" + self.p_and() + " (" + self.isList() + " a) (" + self.isList()\
+                  + " b) ) (" + self.equalList()+ " a b) ((" + self.p_and() + " (" + self.isInt() + " a) (" + \
+                  self.isInt() + " b)) (" + self.eq() + " a b) " + self.false() + "))"
+        return self.expression(content,["a","b"])

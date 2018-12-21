@@ -1,1 +1,1 @@
-(\s. (\s.Sett s 0 0 ) ( (\s. While (\s.Equal (False) ((\s.Equal ((\s.Get s 0) s) (2)) s)) (\s.Sett s 0 ((\s.Add ((\s.Get s 0) s) (1)) s)) s) s)) (Init 2)
+(\s. (\s.Sett s 0 0 ) ( (\s. While (\s.BooleanEval ((\s.Equal (False) ((\s.Equal ((\s.Get s 0) s) (2)) s))s)) (\s.Sett s 0 ((\s.Add ((\s.Get s 0) s) (1)) s)) s) s)) (Init 1)
