@@ -1,7 +1,11 @@
 from gen.whileLangVisitor import whileLangVisitor
 from gen.whileLangParser import whileLangParser
 from myVisitors.codePrinter import codePrinter
+
+# codePrinter is a helper function that keep the code clean.
 cp = codePrinter()
+
+# The below function let you choose whether  you want to use syntaxic sugar or not.
 cp.setHumanReadable(False)
 
 
@@ -16,6 +20,7 @@ class myWhileLangVisitor(whileLangVisitor):
         self.nbVar = nbVar
         self.outputfile = outputfile
 
+    # find whether or not a expression need the environment
     def needState(self,ctx):
         return "var" in ctx.getText()
 
@@ -24,7 +29,7 @@ class myWhileLangVisitor(whileLangVisitor):
         res = ""
         if ctx.instr():
             res = self.visitInstr(ctx.instr())[0]
-            res += " (" + cp.init() + " " + cp.int(int(str(self.nbVar))) + ")"
+            res = r"(\v. (\s. " + cp.get() + " (" + res + " s) "+cp.int(1)+" ) (" + cp.init() + " " + cp.int(int(str(self.nbVar))) + " v)) 0"
         with open(self.outputfile, "w") as myfile:
             myfile.write(res)
 
@@ -44,7 +49,6 @@ class myWhileLangVisitor(whileLangVisitor):
 
         return "problem A"
 
-    #firstVar = True
     def visitInstr(self, ctx: whileLangParser.InstrContext, needLBRA=None):
         #print("in: "+str(needLBRA))
         #print("visitInstr")
@@ -78,7 +82,6 @@ class myWhileLangVisitor(whileLangVisitor):
             condition = r"(\s." + cp.booleanEval() + " (" + self.visitExpr(ctx.expr()) +"s))"
             txt = r" (\s. "+cp.p_while() +" "+ condition + " " + self.visitInstr(ctx.instr())[0]+" s)"
 
-        #print("out: "+str(needLBRA))
 
         return txt, needLBRA
 
@@ -135,7 +138,8 @@ class myWhileLangVisitor(whileLangVisitor):
             return txt + cp.mult() + " (" +self.visitExpr(ctx.expr(0))+ s1 +self.visitExpr(ctx.expr(1)) + s2
         return "problem Expr"
 
-
+    # helper function
+    # sometimes context are list of one object. I need to extract it.
     def checkForList(self,ctx):
         if isinstance(ctx, list):
             return ctx[0]

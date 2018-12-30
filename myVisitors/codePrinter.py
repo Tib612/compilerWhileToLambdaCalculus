@@ -1,7 +1,7 @@
 import sys
 
 '''
-Helper class to print lambda calculus expressions or the name of the function ( 
+Helper class to print lambda calculus expressions or a syntaxic sugar if the "humanReadable" var is szt to True.
 
 '''
 
@@ -84,8 +84,8 @@ class codePrinter():
     def init(self):
         if self.humanReadable:
             return "Init"
-        content = self.is0()+" n "+self.int(0)+" (\z.z "+self.int(0)+" (b ("+self.pred()+" n)))"
-        return self.recursion() + " " + r"(\b.(\n."+content+"))"
+        content = self.is0()+" n "+self.int(0)+" (\z.z v (b ("+self.pred()+" n) "+self.int(0)+"))"
+        return self.recursion() + " " + r"(\b.(\n.(\v."+content+")))"
 
     def int(self,val):
         if self.humanReadable:

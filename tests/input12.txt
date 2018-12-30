@@ -1,24 +1,5 @@
-;
-    ;
-        (:= (var 0)
-            (cons
-                (quote 5)
-                (cons
-                    (quote 6)
-                    (cons
-                        (quote 7)
-                        (quote nil)
-                    )
-                )
-            )
-        )
-        (:= (var 1) (quote nil)
-        )
-    (while
-        (var 0)
-        (
-          ;
-            (:= (var 1) (cons (hd (var 0)) (var 1)))
-            (:= (var 0) (tl (var 0)))
-        )
-    )
+while var 0
+
+  ;
+    := (var 1) (cons (hd (var 0)) (var 1))
+    := (var 0) (tl (var 0))

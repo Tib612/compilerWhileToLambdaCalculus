@@ -1,11 +1,12 @@
 from gen.whileLangVisitor import whileLangVisitor
 from gen.whileLangParser import whileLangParser
 
-
+# This class is only used to get the number of variable the Init function need to create.
 class semantiqueVisitor(whileLangVisitor):
 
     def __init__(self):
-        self.variables = set([])
+        # V0 and V1 are always present as they are the input and output of the program in While.
+        self.variables = set([0,1])
 
     def getVarList(self):
         return self.variables
