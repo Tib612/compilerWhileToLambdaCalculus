@@ -14,6 +14,11 @@ class whileLangVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by whileLangParser#instr.
+    def visitInstr(self, ctx:whileLangParser.InstrContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by whileLangParser#expr.
     def visitExpr(self, ctx:whileLangParser.ExprContext):
         return self.visitChildren(ctx)
@@ -26,21 +31,6 @@ class whileLangVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by whileLangParser#var.
     def visitVar(self, ctx:whileLangParser.VarContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by whileLangParser#instr.
-    def visitInstr(self, ctx:whileLangParser.InstrContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by whileLangParser#aexpr.
-    def visitAexpr(self, ctx:whileLangParser.AexprContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by whileLangParser#bexpr.
-    def visitBexpr(self, ctx:whileLangParser.BexprContext):
         return self.visitChildren(ctx)
 
 

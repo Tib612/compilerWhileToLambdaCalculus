@@ -17,6 +17,15 @@ class whileLangListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by whileLangParser#instr.
+    def enterInstr(self, ctx:whileLangParser.InstrContext):
+        pass
+
+    # Exit a parse tree produced by whileLangParser#instr.
+    def exitInstr(self, ctx:whileLangParser.InstrContext):
+        pass
+
+
     # Enter a parse tree produced by whileLangParser#expr.
     def enterExpr(self, ctx:whileLangParser.ExprContext):
         pass
@@ -41,33 +50,6 @@ class whileLangListener(ParseTreeListener):
 
     # Exit a parse tree produced by whileLangParser#var.
     def exitVar(self, ctx:whileLangParser.VarContext):
-        pass
-
-
-    # Enter a parse tree produced by whileLangParser#instr.
-    def enterInstr(self, ctx:whileLangParser.InstrContext):
-        pass
-
-    # Exit a parse tree produced by whileLangParser#instr.
-    def exitInstr(self, ctx:whileLangParser.InstrContext):
-        pass
-
-
-    # Enter a parse tree produced by whileLangParser#aexpr.
-    def enterAexpr(self, ctx:whileLangParser.AexprContext):
-        pass
-
-    # Exit a parse tree produced by whileLangParser#aexpr.
-    def exitAexpr(self, ctx:whileLangParser.AexprContext):
-        pass
-
-
-    # Enter a parse tree produced by whileLangParser#bexpr.
-    def enterBexpr(self, ctx:whileLangParser.BexprContext):
-        pass
-
-    # Exit a parse tree produced by whileLangParser#bexpr.
-    def exitBexpr(self, ctx:whileLangParser.BexprContext):
         pass
 
 
